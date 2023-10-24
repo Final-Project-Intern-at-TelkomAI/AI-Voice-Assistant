@@ -1,7 +1,7 @@
 # AI-Voice-Assistant
 
 👾 How to run :
-- streamlit run main.py
+- streamlit run main-ai.py
 
 ✨ Library must be installed (pip install) :
 - import streamlit as st
