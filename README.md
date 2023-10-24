@@ -1,12 +1,12 @@
 # AI-Voice-Assistant
 
 👾 How to run :
-streamlit run main.py
+1. streamlit run main.py
 
 ✨ Library must be installed (pip install) :
-import streamlit as st
-import os
-import json
+1. import streamlit as st
+- import os
+- import json
 import requests
 from bardapi import BardCookies
 import tempfile
