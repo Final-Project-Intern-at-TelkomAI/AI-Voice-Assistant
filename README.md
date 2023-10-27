@@ -3,13 +3,9 @@
 👾 How to run :
 - streamlit run main-ai.py
 
-✨ Library must be installed (pip install) :
-- import streamlit as st
-- import os
-- import json
-- import requests
-- from bardapi import BardCookies
-- import tempfile
-- import sounddevice as sd
-- import wavio
-- import time
+✨ Library must be installed (pip install) : `pip install -r requirements.txt`
+- `pip install wave`
+- `pip install pyaudio`
+- `pip install requests`
+- `pip install streamlit`
+- `pip install bardapi`
