@@ -1,0 +1,113 @@
+.landing-page-1-desktop-fram-inner {
+  position: absolute;
+  top: 380px;
+  left: 840px;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25), 0 2px 4px rgba(0, 0, 0, 0.25) inset;
+  width: 131px;
+  height: 46px;
+  cursor: pointer;
+}
+.sign-up {
+  position: relative;
+}
+.sign-up-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: var(--br-9xs);
+  background-color: #686de0;
+  width: 131px;
+  height: 46px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: var(--padding-3xs);
+  box-sizing: border-box;
+}
+.desktop-frame-1440-x-1024-inner {
+  position: absolute;
+  top: 150px;
+  left: 248px;
+  width: 407px;
+  height: 400px;
+}
+.assets-website-mini-project1 {
+  position: absolute;
+  top: 87px;
+  left: 300px;
+  border-radius: 0 0 var(--br-281xl) var(--br-131xl);
+  width: 385px;
+  height: 470px;
+  object-fit: cover;
+}
+.halo-teman1 {
+  margin: 0;
+}
+.halo-teman-ayo-mulai-container1 {
+  position: absolute;
+  top: 250px;
+  left: 812px;
+  letter-spacing: 0.32em;
+  line-height: 167.9%;
+  display: inline-block;
+  width: 278px;
+  height: 133px;
+}
+.header-item {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: linear-gradient(0deg, #7c7fd1, #1a1841);
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  width: 1440px;
+  height: 55px;
+}
+.iconoirprofile-circle1 {
+  position: absolute;
+  top: 12px;
+  left: 1270px;
+  width: 32px;
+  height: 32px;
+  overflow: hidden;
+}
+.open-sidebar-icon {
+  position: absolute;
+  top: 16px;
+  left: 23px;
+  width: 24px;
+  height: 24px;
+}
+.nama-pengguna1 {
+  position: absolute;
+  top: 20px;
+  left: 1200px;
+  font-weight: 500;
+}
+.footer-icon1,
+.header1 {
+  position: absolute;
+  left: 0;
+  width: 1440px;
+}
+.header1 {
+  top: 0;
+  height: 55px;
+  font-size: var(--font-size-xs);
+  font-family: var(--font-montserrat);
+}
+.footer-icon1 {
+  top: 600px;
+  height: 90px;
+}
+.desktop-frame-1440-x-10241 {
+  position: relative;
+  background-color: var(--color-darkslateblue);
+  width: 100%;
+  height: 1024px;
+  overflow: hidden;
+  text-align: left;
+  font-size: var(--font-size-xl);
+  color: var(--color-white);
+  font-family: var(--font-poppins);
+}

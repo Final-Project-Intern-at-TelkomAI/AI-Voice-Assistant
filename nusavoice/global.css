@@ -1,0 +1,99 @@
+/* Stil CSS reguler */
+
+@media (max-width: 768px) {
+  /* Aturan CSS untuk lebar layar ≤ 768px */
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  /* Aturan CSS untuk lebar layar antara 769px dan 1024px */
+}
+.container {
+  width: 100%; /* Container akan mengisi seluruh lebar parent element */
+}
+
+.column {
+  width: 50%; /* Dua kolom dalam satu baris */
+  float: left;
+}
+img {
+  max-width: 100%;
+  height: auto;
+}
+body {
+  font-size: 16px;
+}
+
+@media (max-width: 768px) {
+  body {
+    font-size: 14px;
+  }
+}
+body {
+  margin: 0;
+  line-height: normal;
+}
+
+.popup-overlay {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  inset: 0;
+}
+
+:root {
+  /* fonts */
+  --desktop-body-large-bold: "Nunito Sans";
+  --font-poppins: Poppins;
+  --font-montserrat: Montserrat;
+
+  /* font sizes */
+  --desktop-body-large-bold-size: 18px;
+  --desktop-body-small-bold-size: 16px;
+  --font-size-5xl: 24px;
+  --font-size-xl: 20px;
+  --font-size-sm: 14px;
+  --font-size-xs: 12px;
+  --font-size-13xl: 32px;
+
+  /* Colors */
+  --tertiary-tertiary-10: #fff;
+  --primary-primary-20: #f9e4e4;
+  --primary-primary-50: #e42313;
+  --color-darkslateblue-100: #1a1841;
+  --tertiary-500: #667085;
+  --tertiary-tertiary-70: #5c5e61;
+  --color-gray-100: #8d8d8d;
+  --color-gray-200: #7e7e7e;
+  --tertiary-800: #1d2939;
+  --color-gray-300: #201f26;
+  --color-gray-400: rgba(255, 255, 255, 0.02);
+  --color-darkgray: #b0b0b0;
+  --color-cornflowerblue: rgba(161, 168, 243, 0.35);
+
+  /* Gaps */
+  --gap-base: 16px;
+  --gap-5xs: 8px;
+  --gap-13xl: 32px;
+  --gap-5xl: 24px;
+  --gap-3xs: 10px;
+  --gap-xs: 12px;
+
+  /* Paddings */
+  --padding-5xl: 24px;
+  --padding-sm: 14px;
+  --padding-base: 16px;
+  --padding-3xs: 10px;
+
+  /* Border radiuses */
+  --br-5xs: 8px;
+  --br-7xs: 6px;
+  --br-9xs: 4px;
+  --br-3xs: 10px;
+  --br-281xl: 300px;
+  --br-131xl: 150px;
+  --br-539xl-5: 558.5px;
+  --br-mini: 15px;
+
+  /* Effects */
+  --elevation-5: 0px 8px 40px rgba(0, 0, 0, 0.2), 0px 0px 4px rgba(0, 0, 0, 0.1);
+}
