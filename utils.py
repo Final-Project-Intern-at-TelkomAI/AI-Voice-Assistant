@@ -1,6 +1,5 @@
 import json
 import requests
-import streamlit as st
 from bardapi import Bard
 
 bard_token = "cwjTYB-bxzO9VJHh4eA0igEolTA9VgYHbttiWQjKd1xHHicdxHG1Cm3BEUrpOQmUrcsykQ."
@@ -58,8 +57,6 @@ def ask_bard(text):
     if choices:
         # Access the content within the first choice
         first_choice_content = choices[0].get("content", [])[0]
-    else:
-        st.write("No choices available in the response.")
     return first_choice_content
 
 # Define a function to get audio from text using TTS service
