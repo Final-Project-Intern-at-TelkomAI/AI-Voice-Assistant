@@ -12,6 +12,7 @@ chunk = 1024
 channels = 1
 format = pyaudio.paInt16
 tmp_dir = f"{os.getcwd()}\\temp"
+bard_token = "cwjTYB-bxzO9VJHh4eA0igEolTA9VgYHbttiWQjKd1xHHicdxHG1Cm3BEUrpOQmUrcsykQ."
 
 if not os.path.exists(tmp_dir):
     os.mkdir(tmp_dir)
@@ -100,7 +101,7 @@ def ask_bard(text):
         str: answer from Bard AI
     """    
     first_choice_content = None
-    bard = Bard(token_from_browser=True)
+    bard = Bard(token=bard_token)
     bard_response = bard.get_answer(text)
 
     # Access the "choices" section

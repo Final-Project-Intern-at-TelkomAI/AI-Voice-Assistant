@@ -3,3 +3,5 @@ pyaudio
 requests
 streamlit
 bardapi
+fastapi
+"uvicorn[standard]"
