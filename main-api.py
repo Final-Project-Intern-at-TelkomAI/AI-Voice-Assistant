@@ -4,6 +4,7 @@ import base64
 import shutil
 import tempfile
 from fastapi import FastAPI, Form, File, UploadFile
+from fastapi.responses import FileResponse
 from utils import get_text_from_speech, ask_bard, get_audio_from_text
 
 tmp_dir = f"{os.getcwd()}\\temp"
@@ -16,6 +17,19 @@ app = FastAPI()
 @app.get("/")
 async def root():
     return {"message": "Hello World"}
+
+@app.get('/getLatestAudio')
+async def get_latest_audio():
+    files = os.listdir(tmp_dir)
+    audio_files = [f for f in files if f.endswith('.wav')]
+    
+    if not audio_files:
+        return {"message": "Tidak ada file audio yang ditemukan."}
+    
+    latest_audio = max(audio_files, key=lambda x: os.path.getctime(os.path.join(tmp_dir, x)))
+    file_path = os.path.join(tmp_dir, latest_audio)
+    
+    return FileResponse(file_path, media_type='audio/wav')
  
 @app.post("/upload_audio")
 async def upload_audio(file: UploadFile = File(...)):

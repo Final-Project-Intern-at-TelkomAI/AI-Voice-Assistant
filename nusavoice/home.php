@@ -134,71 +134,100 @@ if (isset($_SESSION["user_id"])) {
         });
       }
 
-            jQuery(document).ready(function () {
-                var $ = jQuery;
-                var myRecorder = {
-                    objects: {
-                        context: null,
-                        stream: null,
-                        recorder: null
-                    },
-                    init: function () {
-                        if (null === myRecorder.objects.context) {
-                            myRecorder.objects.context = new (
+      jQuery(document).ready(function () {
+    var $ = jQuery;
+    var myRecorder = {
+        objects: {
+            context: null,
+            stream: null,
+            recorder: null
+        },
+        init: function () {
+            if (null === myRecorder.objects.context) {
+                myRecorder.objects.context = new (
                                     window.AudioContext || window.webkitAudioContext
                                     );
-                        }
-                    },
-                    start: function () {
-                        var options = {audio: true, video: false};
-                        navigator.mediaDevices.getUserMedia(options).then(function (stream) {
-                            myRecorder.objects.stream = stream;
-                            myRecorder.objects.recorder = new Recorder(
-                                    myRecorder.objects.context.createMediaStreamSource(stream),
-                                    {numChannels: 1}
-                            );
-                            myRecorder.objects.recorder.record();
-                        }).catch(function (err) {});
-                    },
-                    stop: function (listObject) {
-                        if (null !== myRecorder.objects.stream) {
-                            myRecorder.objects.stream.getAudioTracks()[0].stop();
-                        }
-                        if (null !== myRecorder.objects.recorder) {
-                            myRecorder.objects.recorder.stop();
-                            if (null !== listObject
-                                    && 'object' === typeof listObject
-                                    && listObject.length > 0) {
-                                myRecorder.objects.recorder.exportWAV(function (blob) {
-                                    var url = (window.URL || window.webkitURL)
-                                            .createObjectURL(blob);
-                                    var audioObject = $('<audio controls></audio>')
-                                            .attr('src', url);
-                                    var downloadObject = $('<a>&#9660;</a>')
-                                            .attr('href', url)
-                                            .attr('download', new Date().toUTCString() + '.wav');
-                                    var holderObject = $('<div class="row"></div>')
-                                            .append(audioObject)
-                                            .append(downloadObject);
-                                    listObject.append(holderObject);
-                                });
-                            }
-                        }
-                    }
-                };
-                var listObject = $('[data-role="recordings"]');
-                $('[data-role="controls"] > button').click(function () {
-                    myRecorder.init();
-                    var buttonState = !!$(this).attr('data-recording');
-                    if (!buttonState) {
-                        $(this).attr('data-recording', 'true');
-                        myRecorder.start();
-                    } else {
-                        $(this).attr('data-recording', '');
-                        myRecorder.stop(listObject);
-                    }
-                });
-            });
-      </script>
-  </body>
+            }
+        },
+        start: function () {
+            var options = {audio: true, video: false};
+            navigator.mediaDevices.getUserMedia(options).then(function (stream) {
+                myRecorder.objects.stream = stream;
+                myRecorder.objects.recorder = new Recorder(
+                    myRecorder.objects.context.createMediaStreamSource(stream),
+                    {numChannels: 1}
+                );
+                myRecorder.objects.recorder.record();
+            }).catch(function (err) {});
+        },
+        stop: function (listObject) {
+            if (null !== myRecorder.objects.stream) {
+                myRecorder.objects.stream.getAudioTracks()[0].stop();
+            }
+            if (null !== myRecorder.objects.recorder) {
+                myRecorder.objects.recorder.stop();
+                if (null !== listObject
+                    && 'object' === typeof listObject
+                    && listObject.length > 0) {
+                    myRecorder.objects.recorder.exportWAV(function (blob) {
+                        var url = (window.URL || window.webkitURL)
+                                  .createObjectURL(blob);
+                        var audioObject = $('<audio controls></audio>')
+                            .attr('src', url);
+                        var downloadObject = $('<a>&#9660;</a>')
+                            .attr('href', url)
+                            .attr('download', new Date().toUTCString() + '.wav');
+                        var holderObject = $('<div class="row"></div>')
+                            .append(audioObject)
+                            .append(downloadObject);
+                        listObject.append(holderObject);
+
+                        // Call function to send audio to API
+                        sendAudioToAPI(blob);
+                    });
+                }
+            }
+        }
+    };
+
+    var listObject = $('[data-role="recordings"]');
+    $('[data-role="controls"] > button').click(function () {
+        myRecorder.init();
+        var buttonState = !!$(this).attr('data-recording');
+        if (!buttonState) {
+            $(this).attr('data-recording', 'true');
+            myRecorder.start();
+        } else {
+            $(this).attr('data-recording', '');
+            myRecorder.stop(listObject);
+        }
+    });
+
+    function sendAudioToAPI(blob) {
+        var formData = new FormData();
+        formData.append('audio', blob, 'recording.wav');
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', 'upload.php', true);
+
+        xhr.onload = function () {
+            if (xhr.status >= 200 && xhr.status < 300) {
+                var response = JSON.parse(xhr.responseText);
+                var textResult = response.text;
+                var resultElement = $('<div></div>').text('API Result: ' + textResult);
+                listObject.append(resultElement);
+            } else {
+                console.error('Error in API request:', xhr.status, xhr.statusText);
+            }
+        };
+
+        xhr.onerror = function () {
+            console.error('Network error during API request');
+        };
+
+        xhr.send(formData);
+    }
+});
+</script>
+</body>
 </html>
