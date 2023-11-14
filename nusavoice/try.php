@@ -9,8 +9,9 @@
 
 <button id="recordButton" onclick="toggleRecording()">Record</button>
 <audio id="audioPlayer" controls></audio>
-<audio id="audioResult" controls>
+<audio id="jawaban" controls>
     <source src="http://127.0.0.1:8000/getLatestAudio" type="audio/wav">
+</audio>
 <div id="result"></div>
 
 <script>
@@ -29,10 +30,11 @@ async function sendAudioToEndpoint(formData, endpoint) {
             throw new Error('Network response was not ok.');
         }
 
-        const data = await response.json();
-        console.log('Response:', data);
+        const audioBlob = await response.blob();
+        console.log('Received audio blob:', audioBlob);
 
-        // Do something with the data received from the server
+        const audioPlayer = document.getElementById('audioResult');
+        audioResult.src = URL.createObjectURL(audioBlob);
     } catch (error) {
         console.error('There was a problem with the fetch operation:', error);
         const resultElement = document.getElementById('result');
@@ -62,9 +64,7 @@ async function toggleRecording() {
 
             audioPlayer.src = URL.createObjectURL(audioBlob);
             audioPlayer.play();
-    
-        // Setelah audio rekaman selesai diputar, panggil fungsi playLatestAudio
-        audioPlayer.onended = () => {
+            audioPlayer.onended = async () => {
                 playLatestAudio();
             };
         };
@@ -86,28 +86,36 @@ async function playLatestAudio() {
             method: 'GET',
         });
 
+        if (!response.ok) {
+            throw new Error('Network response was not ok.');
+        }
+
         const audioBlob = await response.blob();
         console.log('Received audio blob:', audioBlob);
 
-        const audioSource = document.getElementById('audioSource');
-        audioSource.src = URL.createObjectURL(audioBlob);
-
-        const audioResult = document.getElementById('audioResult');
-        audioResult.load(); // Reload audio player to update source
-        audioResult.play(); // Play the audio
+        //const audioResult = document.getElementById('audioResult');
+        //audioResult.src = URL.createObjectURL(audioBlob);
+        //audioResult.play(); // Memulai pemutaran audio
     } catch (error) {
         console.error('There was a problem with the fetch operation:', error);
         const resultElement = document.getElementById('result');
     }
 }
 
-// Function to play latest audio when the page loads
-//window.onload = function() {
-//    playLatestAudio();
-//};
+function refreshLatestAudio() {
+    const audioPlayer = document.getElementById('jawaban');
+        audioPlayer.src = URL.createObjectURL(audioBlob);
+        audioPlayer.play();
+}
+
+// Function to play latest recorded audio when the page loads
+window.onload = function() {
+    //playLatestAudio(); // Pertama kali memuat audio saat halaman dimuat
+    // Set interval untuk memperbarui audio secara berkala
+    setInterval(refreshLatestAudio, 3000);
+}
+
 
 </script>
-</audio> 
-</audio>
 </body>
 </html>
