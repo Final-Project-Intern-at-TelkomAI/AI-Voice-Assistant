@@ -1,10 +1,40 @@
+<?php
+include 'config.php';
+session_start();
+
+if (isset($_SESSION["user_id"])) {
+  $first_name = $_SESSION["first_name"];
+} else {
+  header("Location: ./login.php");
+  exit;
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Audio Recorder</title>
-</head>
+<title>NusaTalk</title>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1, width=device-width" />
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            overflow: auto;
+        }
+    </style>
+    <link rel="icon" type="image/ico" href="public/assets--website---mini-project-8-2@2x.png">
+    <link rel="stylesheet" href="./global.css" />
+    <link rel="stylesheet" href="./home.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito Sans:wght@400;700&display=swap"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,700;1,400&display=swap"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <script type="text/javascript" src="https://code.jquery.com/jquery.min.js"></script>
+    <script src="https://markjivko.com/dist/recorder.js"></script>
+  </head>
 <body>
 
 <button id="recordButton" onclick="toggleRecording()">Record</button>
