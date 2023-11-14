@@ -1,15 +1,3 @@
-<?php
-include 'config.php';
-session_start();
-
-if (isset($_SESSION["user_id"])) {
-  $first_name = $_SESSION["first_name"];
-} else {
-  header("Location: ./login.php");
-  exit;
-}
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <title>NusaTalk</title>
@@ -75,7 +63,6 @@ async function toggleRecording() {
     const audioPlayer = document.getElementById('audioPlayer');
 
     if (!isRecording) {
-        // Start recording
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
         mediaRecorder = new MediaRecorder(stream);
         
@@ -138,10 +125,7 @@ function refreshLatestAudio() {
         audioPlayer.play();
 }
 
-// Function to play latest recorded audio when the page loads
 window.onload = function() {
-    //playLatestAudio(); // Pertama kali memuat audio saat halaman dimuat
-    // Set interval untuk memperbarui audio secara berkala
     setInterval(refreshLatestAudio, 3000);
 }
 
