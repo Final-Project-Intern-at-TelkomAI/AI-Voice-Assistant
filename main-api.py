@@ -63,7 +63,7 @@ async def ask_nusa(audio: UploadFile = File(...)):
         "file_answer": tmp_file_answer
         }
     ]
-
+        
 @app.post('/askNusa_base64')
 async def ask_nusa_base64(audio: str = Form(...)):
     text = None
