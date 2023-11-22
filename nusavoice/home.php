@@ -35,8 +35,8 @@ if (isset($_SESSION["user_id"])) {
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <script type="text/javascript" src="https://code.jquery.com/jquery.min.js"></script>
   <script src="https://markjivko.com/dist/recorder.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
 <body>
@@ -143,107 +143,95 @@ if (isset($_SESSION["user_id"])) {
       }
 
       // RECORDS
-      jQuery(document).ready(function() {
-        var $ = jQuery;
-        var myRecorder = {
-          objects: {
-            context: null,
-            stream: null,
-            recorder: null
-          },
-          init: function() {
-            if (null === myRecorder.objects.context) {
-              myRecorder.objects.context = new(
-                window.AudioContext || window.webkitAudioContext
-              );
-            }
-          },
-          start: function() {
-            var options = {
-              audio: true,
-              video: false
-            };
-            navigator.mediaDevices.getUserMedia(options).then(function(stream) {
-              myRecorder.objects.stream = stream;
-              myRecorder.objects.recorder = new Recorder(
-                myRecorder.objects.context.createMediaStreamSource(stream), {
-                  numChannels: 1
-                }
-              );
-              myRecorder.objects.recorder.record();
-            }).catch(function(err) {});
-          },
-          stop: function(listObject) {
-            if (null !== myRecorder.objects.stream) {
-              myRecorder.objects.stream.getAudioTracks()[0].stop();
-            }
-            if (null !== myRecorder.objects.recorder) {
-              myRecorder.objects.recorder.stop();
+jQuery(document).ready(function() {
+  var $ = jQuery;
+  var myRecorder = {
+    objects: {
+      context: null,
+      stream: null,
+      recorder: null
+    },
+    init: function() {
+      if (null === myRecorder.objects.context) {
+        myRecorder.objects.context = new (window.AudioContext || window.webkitAudioContext)();
+      }
+    },
+    start: function() {
+      var options = {
+        audio: true,
+        video: false
+      };
+      navigator.mediaDevices.getUserMedia(options)
+        .then(function(stream) {
+          myRecorder.objects.stream = stream;
+          myRecorder.objects.recorder = new Recorder(myRecorder.objects.context.createMediaStreamSource(stream), {
+            numChannels: 1
+          });
+          myRecorder.objects.recorder.record();
+        })
+        .catch(function(err) {});
+    },
+    stop: function (listObject) {
+                        if (null !== myRecorder.objects.stream) {
+                            myRecorder.objects.stream.getAudioTracks()[0].stop();
+                        }
+                        if (null !== myRecorder.objects.recorder) {
+                            myRecorder.objects.recorder.stop();
+                            if (null !== listObject
+                                    && 'object' === typeof listObject
+                                    && listObject.length > 0) {
+                                myRecorder.objects.recorder.exportWAV(function (blob) {
+                                    var url = (window.URL || window.webkitURL)
+                                            .createObjectURL(blob);
+                                    var audioObject = $('<audio controls></audio>')
+                                            .attr('src', url);
+          const formData = new FormData();
+          formData.append('audio', blob, 'audio.wav');
 
-              if (null !== listObject &&
-                'object' === typeof listObject &&
-                listObject.length > 0) {
-                myRecorder.objects.recorder.exportWAV(async function(blob) {
-                  try {
-                    const formData = new FormData();
-                    formData.append('audio', blob, 'audio.wav');
+            $.ajax({
+              url: 'http://127.0.0.1:5000/askNusa',
+              type: 'POST',
+              data: formData,
+              processData: false,
+              contentType: false,
+              headers: {
+                'Access-Control-Allow-Origin': '*' // Change * to your specific origin if possible
+              },
+              success: function(response) {
+                const audioURL = "http://localhost/AI-Voice-Assistant/temp/audio_answer.wav";
 
-                    await sendAudioToEndpoint(formData, 'http://127.0.0.1:8000/askNusa');
-
-                  } catch (error) {
-                    console.error('Error exporting WAV:', error);
-                  }
-                });
+                const audioElement = document.getElementById('audioPlayer');
+                audioElement.src = audioURL;
+                audioElement.controls = true;
+                audioElement.play();
+              },
+              error: function(error) {
+                console.error('There was a problem with the AJAX request:', error);
               }
-            }
-          }
-        };
-
-        var listObject = $('[data-role="recordings"]');
-
-        $('[data-role="controls"] > button').click(function() {
-
-          myRecorder.init();
-
-          var buttonState = !!$(this).attr('data-recording');
-
-          if (!buttonState) {
-            $(this).attr('data-recording', 'true');
-            myRecorder.start();
-          } else {
-            $(this).attr('data-recording', '');
-            myRecorder.stop(listObject);
-          }
-        });
-
-        // SEND API
-        async function sendAudioToEndpoint(formData, endpoint) {
-          try {
-            const response = await fetch(endpoint, {
-              method: 'POST',
-              body: formData,
             });
-
-            if (!response.ok) {
-              throw new Error('Network response was not ok.');
-            }
-
-            const audioBlob = await response.blob();
-
-            const audioURL = URL.createObjectURL(audioBlob);
-
-            const audioElement = document.createElement('audio');
-            audioElement.src = audioURL;
-            audioElement.controls = true;
-
-            const audioContainer = document.getElementById('audio-container');
-            audioContainer.innerHTML = '';
-            audioContainer.appendChild(audioElement);
-          } catch (error) {
-            console.error('There was a problem with the fetch operation:', error);
-          }
+          });
         }
-      });
+      }
+    }
+  };
+
+  var listObject = $('[data-role="recordings"]');
+
+  $('[data-role="controls"] > button').click(function() {
+    myRecorder.init();
+
+    var buttonState = !!$(this).attr('data-recording');
+
+    if (!buttonState) {
+      $(this).attr('data-recording', 'true');
+      myRecorder.start();
+    } else {
+      $(this).attr('data-recording', '');
+      myRecorder.stop(listObject);
+    }
+  });
+});
+
     </script>
 </body>
 
