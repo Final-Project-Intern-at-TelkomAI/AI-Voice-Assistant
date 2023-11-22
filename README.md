@@ -5,6 +5,7 @@
 
 👾 How to run API:
 - uvicorn main-api:app --reload
+- python apiflask.py
 
 ✨ Library must be installed (pip install) : `pip install -r requirements.txt`
 - `pip install wave`
