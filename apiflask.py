@@ -38,9 +38,12 @@ class AskNusa(Resource):
         if audio_file.filename == '':
             return jsonify({"message": "No selected file"}), 400
 
-        filename = secure_filename(audio_file.filename)
-        tmp_file = f"{tmp_dir}/{filename}"
-        tmp_file_answer = f"{tmp_dir}/{filename.split('.')[0]}_answer.wav"
+        with tempfile.NamedTemporaryFile(suffix=".wav", dir=tmp_dir, delete=False) as tmp_wav_file:
+            tmp_file = tmp_wav_file.name
+            split_tmp_wav_file = tmp_wav_file.name.split(".wav")
+            tmp_file_answer = f"{split_tmp_wav_file[0]}_answer.wav"
+            split_tmp_wav_file_response = tmp_file_answer.split("\\")
+            tmp_file_answer_response = split_tmp_wav_file_response[len(split_tmp_wav_file_response)-1]
 
         audio_file.save(tmp_file)
         text = get_text_from_speech(tmp_file)
@@ -57,7 +60,7 @@ class AskNusa(Resource):
         return {
             "text_input": text,
             "text_answer": answer,
-            "file_answer": tmp_file_answer
+            "file_answer": tmp_file_answer_response
         }
 
 @app.route('/getAnswerAudio', methods=['GET'])
