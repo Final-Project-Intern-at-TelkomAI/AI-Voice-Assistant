@@ -15,3 +15,6 @@
 - `pip install bardapi`
 - `pip install fastapi`
 - `pip install "uvicorn[standard]"`
+- `pip install Flask`
+- `pip install flask-restx`
+- `pip install Flask-Cors`

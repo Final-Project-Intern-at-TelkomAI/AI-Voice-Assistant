@@ -5,3 +5,6 @@ streamlit
 bardapi
 fastapi
 "uvicorn[standard]"
+Flask
+flask-restx
+Flask-Cors
