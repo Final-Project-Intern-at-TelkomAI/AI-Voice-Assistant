@@ -35,53 +35,68 @@
 
         function startRecording() {
             navigator.mediaDevices.getUserMedia({ audio: true })
-        .then(function (stream) {
-            mediaRecorder = new MediaRecorder(stream);
-            mediaRecorder.ondataavailable = function (e) {
-                recordedChunks.push(e.data);
-            };
-            mediaRecorder.onstop = function () {
-                const audioBlob = new Blob(recordedChunks, { type: 'audio/wav' });
-                const formData = new FormData();
-                formData.append('audio', audioBlob, 'audio.wav');
+                .then(function (stream) {
+                    mediaRecorder = new MediaRecorder(stream);
+                    mediaRecorder.ondataavailable = function (e) {
+                        recordedChunks.push(e.data);
+                    };
+                    mediaRecorder.onstop = function () {
+                        const audioBlob = new Blob(recordedChunks, { type: 'audio/wav' });
+                        const formData = new FormData();
+                        formData.append('audio', audioBlob, 'audio.wav');
 
-                fetch('http://127.0.0.1:5000/askNusa', {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        'Access-Control-Allow-Origin': '*' 
-                    },
+                        fetch('http://127.0.0.1:5000/askNusa', {
+                            method: 'POST',
+                            body: formData,
+                            headers: {
+                                'Access-Control-Allow-Origin': '*'
+                            },
+                        })
+                        .then(response => {
+                            const audioElement = document.getElementById('audioPlayer');
+                            audioElement.src = URL.createObjectURL(audioBlob);
+                            audioElement.controls = true;
+                            audioElement.play();
+                            const audioURL = "http://localhost/AI-Voice-Assistant/temp/audio_answer.wav";
+
+                            audioElement.addEventListener('ended', () => {
+                                const additionalAudioElement = document.getElementById('audioPlayer2');
+                                additionalAudioElement.src = audioURL;
+                                additionalAudioElement.controls = true;
+
+                                const playAdditionalAudio = () => {
+                                    fetch(audioURL)
+                                        .then(response => response.blob())
+                                        .then(blob => {
+                                            const objectURL = URL.createObjectURL(blob);
+                                            additionalAudioElement.src = objectURL; 
+                                            additionalAudioElement.controls = true;
+                                            additionalAudioElement.play(); 
+                                        })
+                                        .catch(error => {
+                                            console.error('Error fetching audio:', error);
+                                        });
+                                };
+
+                                playAdditionalAudio();
+
+                            
+                            });
+
+                            const responseDisplay = document.getElementById('responseDisplay');
+                            responseDisplay.appendChild(additionalAudioElement);
+                        })
+                        .catch(error => {
+                            console.error('There was a problem with the fetch request:', error);
+                        });
+                    };
+                    recordedChunks = [];
+                    mediaRecorder.start();
                 })
-                .then(response => {
-                    const audioElement = document.getElementById('audioPlayer');
-                    audioElement.src = URL.createObjectURL(audioBlob);
-                    audioElement.controls = true;
-                    audioElement.play();
-
-                    audioElement.addEventListener('ended', () => {
-                    const additionalAudioElement = document.getElementById('audioPlayer2');
-                    const audioURL = "http://localhost/AI-Voice-Assistant/temp/audio_answer.wav";
-                    additionalAudioElement.src = audioURL;
-                    additionalAudioElement.controls = true;
-                    additionalAudioElement.play();
-
-                    const responseDisplay = document.getElementById('responseDisplay');
-                    responseDisplay.appendChild(additionalAudioElement);
-                    });
-
-                    audioElement.play(); 
-                })
-                .catch(error => {
-                    console.error('There was a problem with the fetch request:', error);
+                .catch(function (err) {
+                    console.error('Error accessing the microphone:', err);
                 });
-            };
-            recordedChunks = [];
-            mediaRecorder.start();
-        })
-        .catch(function (err) {
-            console.error('Error accessing the microphone:', err);
-        });
-}
+        }
 
         function stopRecording() {
             if (mediaRecorder.state !== 'inactive') {
