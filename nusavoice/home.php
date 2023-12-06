@@ -154,6 +154,10 @@ if (isset($_SESSION["user_id"])) {
 					$(this).attr('data-recording', '');
 					stopRecording();
 					document.getElementById('recordButton').textContent = 'Start Recording';
+					const textInputElement = document.getElementById('textInput');
+					const textAnswerElement = document.getElementById('textAnswer');
+					textInputElement.innerHTML = ``;
+					textAnswerElement.innerHTML = ``;
 				}
 			}
 
