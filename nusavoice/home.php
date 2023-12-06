@@ -41,6 +41,7 @@ if (isset($_SESSION["user_id"])) {
 				<div data-role="controls">
 					<button id="recordButton">Record</button>
 				</div>
+				<div data-role="recordings"></div>
 				<div id="responseDisplay">
 					<audio id="audioPlayer" controls></audio>
 					<p id="textInput"></p>
@@ -146,9 +147,11 @@ if (isset($_SESSION["user_id"])) {
 
 			function toggleRecording() {
 				if (!mediaRecorder || mediaRecorder.state === 'inactive') {
+					$(this).attr('data-recording', 'true');
 					startRecording();
 					document.getElementById('recordButton').textContent = 'Stop Recording';
 				} else {
+					$(this).attr('data-recording', '');
 					stopRecording();
 					document.getElementById('recordButton').textContent = 'Start Recording';
 				}
