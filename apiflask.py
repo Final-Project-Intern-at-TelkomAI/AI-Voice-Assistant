@@ -12,9 +12,11 @@ app = Flask(__name__)
 CORS(app)
 api = Api(app)
 
-
 tmp_dir = "C:/xampp/htdocs/AI-Voice-Assistant/temp"  # Ganti dengan direktori temp Anda
 tmp_file_answer = None  # Definisikan sebagai variabel global
+
+if not os.path.exists(tmp_dir):
+    os.mkdir(tmp_dir)
 
 answer_model = api.model('Answer', {
     'text_input': fields.String(description='Text input from audio'),
